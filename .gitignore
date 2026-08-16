@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 coverage/
+
+# Extension packaging
+extension-key.pem
+*.crx
+*.zip

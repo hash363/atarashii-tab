@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import "./styles/ConfigModal.scss"
+import './styles/ConfigModal.scss'
 
 interface ConfigModalProps {
   open: boolean
@@ -10,7 +10,6 @@ interface ConfigModalProps {
 }
 
 export const ConfigModal = function ({ open, setOpen, config, setConfig }: ConfigModalProps) {
-
   // useEffect(() => {
   //   chrome.storage.sync.get(["config"], (res) => {
   //     console.log(res)
@@ -24,20 +23,21 @@ export const ConfigModal = function ({ open, setOpen, config, setConfig }: Confi
   return (
     <div className="modal">
       <div className="modal-bg" onClick={() => setOpen(false)} />
-      <form className="modal-content" onSubmit={(e) => {
-        e.preventDefault()
+      <form
+        className="modal-content"
+        onSubmit={(e) => {
+          e.preventDefault()
 
-        // const toSet = {
-        //   ...data,
-        //   t: 'all'
-        // }
+          // const toSet = {
+          //   ...data,
+          //   t: 'all'
+          // }
 
-
-
-        // chrome.storage.sync.set({ config: JSON.stringify(toSet) }, () => {
-        //   console.log('[i] Settings saved')
-        // })
-      }}>
+          // chrome.storage.sync.set({ config: JSON.stringify(toSet) }, () => {
+          //   console.log('[i] Settings saved')
+          // })
+        }}
+      >
         <h1>Settings</h1>
 
         <label>

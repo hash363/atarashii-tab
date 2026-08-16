@@ -1,24 +1,19 @@
-import { persist } from "valtio-persist"
+import { persist } from 'valtio-persist'
 
 export const PRIMARY_COLOR_PRESETS = [
-  "#ffc400",
-  "#ff6b6b",
-  "#7c5cff",
-  "#00d2ff",
-  "#2ee59d",
+  '#ffc400',
+  '#ff6b6b',
+  '#7c5cff',
+  '#00d2ff',
+  '#2ee59d',
 ] as const
 
 export const CONFIG_STATE_PICKABLE_FIELDS_MAP = {
-  sort: ["relevance", "hot", "top", "new"],
-  t: ["hour", "day", "week", "month", "year", "all"],
+  sort: ['relevance', 'hot', 'top', 'new'],
+  t: ['hour', 'day', 'week', 'month', 'year', 'all'],
 }
 
-export const CONFIG_STATE_TOGGLEABLE_FIELDS = [
-  "nsfw",
-  "incognito",
-  "hideGui",
-  "pinned",
-] as const
+export const CONFIG_STATE_TOGGLEABLE_FIELDS = ['nsfw', 'incognito', 'hideGui', 'pinned'] as const
 
 export type ConfigState = {
   num?: number
@@ -56,8 +51,8 @@ export const { store: ConfigStore } = await persist<ConfigState>(
   {
     num: undefined,
     q: `flair:"Desktop"`,
-    sort: "top",
-    t: "year",
+    sort: 'top',
+    t: 'year',
 
     nsfw: false,
     incognito: false,
@@ -84,7 +79,7 @@ export const { store: ConfigStore } = await persist<ConfigState>(
       rerollFlash: true,
     },
   },
-  "config"
+  'config',
 )
 
 export const toggle = (key: keyof ConfigStateToggleableFields) => {
@@ -102,10 +97,10 @@ export const toggleNsfw = () => {
 
 export const pickValue = <K extends keyof ConfigStatePickableFields>(
   key: K,
-  value: ConfigState[K]
+  value: ConfigState[K],
 ) => {
   // Sorting by new on Reddit needs to be all
-  if (key === "sort" && value === "new") ConfigStore.t = "all"
+  if (key === 'sort' && value === 'new') ConfigStore.t = 'all'
   ConfigStore[key] = value
 }
 

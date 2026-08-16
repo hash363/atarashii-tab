@@ -1,24 +1,24 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from 'vitest'
 import {
   ConfigStore,
   pickValue,
   toggle,
   toggleMenu,
   toggleNsfw,
-} from "../../src/stores/ConfigStore"
+} from '../../src/stores/ConfigStore'
 
-describe("ConfigStore helpers", () => {
-  it("toggle flips toggleable fields", () => {
+describe('ConfigStore helpers', () => {
+  it('toggle flips toggleable fields', () => {
     const initial = ConfigStore.hideGui
 
-    toggle("hideGui")
+    toggle('hideGui')
     expect(ConfigStore.hideGui).toBe(!initial)
 
-    toggle("hideGui")
+    toggle('hideGui')
     expect(ConfigStore.hideGui).toBe(initial)
   })
 
-  it("toggleNsfw flips nsfw", () => {
+  it('toggleNsfw flips nsfw', () => {
     const initial = ConfigStore.nsfw
 
     toggleNsfw()
@@ -28,16 +28,16 @@ describe("ConfigStore helpers", () => {
     expect(ConfigStore.nsfw).toBe(initial)
   })
 
-  it("pickValue updates pickable fields and sets t=all for sort=new", () => {
-    pickValue("t", "month")
-    expect(ConfigStore.t).toBe("month")
+  it('pickValue updates pickable fields and sets t=all for sort=new', () => {
+    pickValue('t', 'month')
+    expect(ConfigStore.t).toBe('month')
 
-    pickValue("sort", "new")
-    expect(ConfigStore.sort).toBe("new")
-    expect(ConfigStore.t).toBe("all")
+    pickValue('sort', 'new')
+    expect(ConfigStore.sort).toBe('new')
+    expect(ConfigStore.t).toBe('all')
   })
 
-  it("toggleMenu flips visibility", () => {
+  it('toggleMenu flips visibility', () => {
     const initial = ConfigStore.isMenuVisible
 
     toggleMenu()
