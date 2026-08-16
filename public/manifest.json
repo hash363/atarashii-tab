@@ -11,6 +11,7 @@
   },
   "host_permissions": [
     "https://www.reddit.com/r/Animewallpaper/search.json*",
-    "https://i.redd.it/"
+    "https://i.redd.it/",
+    "https://www.reddit.com/*"
   ]
 }
