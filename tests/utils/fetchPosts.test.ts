@@ -5,11 +5,11 @@ import { makeListing } from "../helpers"
 describe("fetchPosts", () => {
   it("builds the query, paginates, and filters image posts", async () => {
     const fetchMock = vi.fn()
-      .mockResolvedValueOnce({ json: async () => makeListing([
+      .mockResolvedValueOnce({ ok: true, json: async () => makeListing([
         { url: "https://i.redd.it/1.jpg", thumbnail: "default" },
         { url: "https://example.com/skip.jpg", thumbnail: "default" },
       ], "after-1") })
-      .mockResolvedValueOnce({ json: async () => makeListing([
+      .mockResolvedValueOnce({ ok: true, json: async () => makeListing([
         { url: "https://i.redd.it/2.jpg", thumbnail: "default" },
       ], null) })
 
@@ -39,6 +39,7 @@ describe("fetchPosts", () => {
 
   it("filters to nsfw i.redd.it posts when nsfw is enabled", async () => {
     const fetchMock = vi.fn().mockResolvedValueOnce({
+      ok: true,
       json: async () => makeListing([
         { url: "https://i.redd.it/nsfw.jpg", thumbnail: "nsfw" },
         { url: "https://i.redd.it/sfw.jpg", thumbnail: "default" },
@@ -61,4 +62,35 @@ describe("fetchPosts", () => {
       { url: "https://i.redd.it/nsfw.jpg", thumbnail: "nsfw" },
     ])
   })
+
+  it("throws a clear error when the API responds with a non-2xx status", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: false,
+      status: 403,
+      json: async () => ({ error: 403, message: "Forbidden" }),
+    }))
+
+    await expect(fetchPosts({
+      q: 'flair:"Desktop"',
+      sort: "top",
+      t: "year",
+      nsfw: false,
+    } as never)).rejects.toThrow("status 403")
 })
+
+         it("throws a clear error when the API returns HTML instead of JSON", async() => {
+           vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+             ok: true,
+             status: 200,
+             json: async () => {
+               throw new SyntaxError('Unexpected token \'<\', "<body clas" is not valid JSON')
+             },
+           }))
+
+            await expect(fetchPosts({
+              q: 'flair:"Desktop"',
+              sort: "top",
+              t: "year",
+              nsfw: false,
+            } as never)).rejects.toThrow("did not return a JSON response")
+         })
