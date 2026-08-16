@@ -68,11 +68,14 @@ function App() {
         Date.now() - cache.lastUpdated >= 1000 * 60 * 60 * 24
       ) {
         console.log("[i] Fetching w/ config:", config)
-        posts = await fetchPosts(config)
-
-        if (!ignore) {
-          CacheStore.lastUpdated = Date.now()
-          CacheStore.data = posts
+        try {
+          posts = await fetchPosts(config)
+          if (!ignore) {
+            CacheStore.lastUpdated = Date.now()
+            CacheStore.data = posts
+          }
+        } catch (error) {
+          console.error("[i] Failed to fetch posts:", error)
         }
       } else {
         console.log("[i] Using cached posts")
