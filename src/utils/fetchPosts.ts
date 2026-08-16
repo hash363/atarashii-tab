@@ -26,8 +26,22 @@ export async function fetchPosts(config: ConfigState) {
     const res = await fetch(
       `https://www.reddit.com/r/Animewallpaper/search.json?${query}`,
     )
-    const json = (await res.json()) as RedditSearchResponse
 
+    if (!res.ok) {
+      throw new Error(`Redit API responded with status ${res.status}`)
+    }
+
+    let json: RedditSearchResponse
+    try {
+      json = (await res.json()) as RedditSearchResponse
+    } catch {
+      throw new Error("Redit API did not return a JSON response")
+    }
+
+    if (!json.data) {
+      throw new Error("Redit API returned an invalid response")
+    }
+    
     posts = posts.concat(json.data.children.map((child) => child.data))
     after = json.data.after
     if (!after) break
