@@ -100,6 +100,19 @@ describe("App", () => {
     expect(AppStore.loaded).toBe(LoadState.LOADED)
   })
 
+  it("gracefully handles a failed fetch without an unhandled rejection", async () => {
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {})
+    fetchPostsMock.mockRejectedValue(new Error("Reddit API responded with status 403"))
+
+    render(<App />)
+
+    expect(await screen.findByText(/no images found/i)).toBeInTheDocument()
+    expect(screen.getByText(/reddit down perhaps/i)).toBeInTheDocument()
+    expect(screen.queryByTestId("background-image")).not.toBeInTheDocument()
+    expect(AppStore.loaded).toBe(LoadState.LOADED)
+    expect(CacheStore.lastUpdated).toBe(-1)
+    errorSpy.mockRestore()
+
   it("switches pinned rerolls to loading without fetching", async () => {
     ConfigStore.pinned = true
     HistoryStore.history = [makeImageData({ url: "https://i.redd.it/pinned.jpg" })]
