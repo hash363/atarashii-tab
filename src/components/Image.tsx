@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react"
-import NProgress from "nprogress"
+import React, { useEffect, useRef, useState } from 'react'
+import NProgress from 'nprogress'
 
 type ImageProps = React.ImgHTMLAttributes<HTMLImageElement>
 

@@ -1,24 +1,17 @@
-import "./styles/Menu.scss"
-import { type CSSProperties, useEffect, useRef, useState } from "react"
-import {
-  FaCog,
-  FaEyeDropper,
-  FaHistory,
-  FaStar,
-  FaThumbtack,
-  FaTrash,
-} from "react-icons/fa"
-import { ConfigStore, PRIMARY_COLOR_PRESETS } from "../stores/ConfigStore"
-import { useSnapshot } from "valtio"
+import './styles/Menu.scss'
+import { type CSSProperties, useEffect, useRef, useState } from 'react'
+import { FaCog, FaEyeDropper, FaHistory, FaStar, FaThumbtack, FaTrash } from 'react-icons/fa'
+import { ConfigStore, PRIMARY_COLOR_PRESETS } from '../stores/ConfigStore'
+import { useSnapshot } from 'valtio'
 import {
   clearHistory,
   HistoryStore,
   removeHistoryAt,
   toggleFavoriteAt,
-} from "../stores/HistoryStore"
-import { LoadState, setLoaded } from "../stores/AppStore"
+} from '../stores/HistoryStore'
+import { LoadState, setLoaded } from '../stores/AppStore'
 
-type MenuTab = "history" | "settings"
+type MenuTab = 'history' | 'settings'
 
 type MenuCardProps = {
   data: (typeof HistoryStore.history)[number]
@@ -44,19 +37,17 @@ function MenuCard({
   return (
     <div
       data-index={index}
-      className={`card ${isPinned ? "pinned" : ""} ${isCurrent ? "current" : ""} ${isEntering ? "entering" : ""}`}
-      onClick={
-        () => {
-          if (isPinned) {
-            ConfigStore.pinned = false
-            setLoaded(LoadState.LOADED)
-          } else {
-            ConfigStore.pinned = true
-            HistoryStore.i = index
-            setLoaded(isCurrent ? LoadState.LOADED : LoadState.LOADING)
-          }
+      className={`card ${isPinned ? 'pinned' : ''} ${isCurrent ? 'current' : ''} ${isEntering ? 'entering' : ''}`}
+      onClick={() => {
+        if (isPinned) {
+          ConfigStore.pinned = false
+          setLoaded(LoadState.LOADED)
+        } else {
+          ConfigStore.pinned = true
+          HistoryStore.i = index
+          setLoaded(isCurrent ? LoadState.LOADED : LoadState.LOADING)
         }
-      }
+      }}
     >
       <div className="card-image">
         <img
@@ -64,28 +55,28 @@ function MenuCard({
           loading="lazy"
           decoding="async"
           onLoad={(event) => {
-            event.currentTarget.classList.add("loaded")
+            event.currentTarget.classList.add('loaded')
           }}
         />
       </div>
 
       <p className="card-details">
-        <strong title={data.title || "Untitled Wallpaper"}>
-          {data.title || "Untitled Wallpaper"}
+        <strong title={data.title || 'Untitled Wallpaper'}>
+          {data.title || 'Untitled Wallpaper'}
         </strong>
         {data.res && <small>{data.res}</small>}
       </p>
 
       <p className="card-status">
-        <span>#{String(index + 1).padStart(2, "0")}</span>
-        {isPinned ? <FaThumbtack size={14} /> : isNewest ? "NEW" : null}
+        <span>#{String(index + 1).padStart(2, '0')}</span>
+        {isPinned ? <FaThumbtack size={14} /> : isNewest ? 'NEW' : null}
       </p>
 
       <div className="card-actions">
         <button
           type="button"
-          className={`card-action-button card-favorite-button ${data.favorite ? "active" : ""}`}
-          aria-label={`${data.favorite ? "Remove" : "Add"} ${data.title || "wallpaper"} ${data.favorite ? "from" : "to"} favorites`}
+          className={`card-action-button card-favorite-button ${data.favorite ? 'active' : ''}`}
+          aria-label={`${data.favorite ? 'Remove' : 'Add'} ${data.title || 'wallpaper'} ${data.favorite ? 'from' : 'to'} favorites`}
           onClick={(event) => {
             event.stopPropagation()
             onFavorite()
@@ -97,7 +88,7 @@ function MenuCard({
         <button
           type="button"
           className="card-action-button card-remove-button"
-          aria-label={`Remove ${data.title || "wallpaper"} from history`}
+          aria-label={`Remove ${data.title || 'wallpaper'} from history`}
           onClick={(event) => {
             event.stopPropagation()
             onRemove()
@@ -110,16 +101,16 @@ function MenuCard({
   )
 }
 
-export default function Menu () {
+export default function Menu() {
   const { history, i: historyIndex } = useSnapshot(HistoryStore)
   const { pinned, isMenuVisible, theme, settings } = useSnapshot(ConfigStore)
-  const [activeTab, setActiveTab] = useState<MenuTab>("history")
+  const [activeTab, setActiveTab] = useState<MenuTab>('history')
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const previousHistoryLength = useRef(history.length)
   const [enteringIndex, setEnteringIndex] = useState<number | null>(null)
   const primaryColor = theme.primary
   const isCustomPrimaryColor = !PRIMARY_COLOR_PRESETS.includes(
-    primaryColor as (typeof PRIMARY_COLOR_PRESETS)[number]
+    primaryColor as (typeof PRIMARY_COLOR_PRESETS)[number],
   )
   const backgroundDim = theme.backgroundDim ?? 0.35
   const historyCards = [...history]
@@ -150,12 +141,12 @@ export default function Menu () {
   }
 
   return (
-    <div className={`menu ${isMenuVisible ? "visible" : ""}`}>
+    <div className={`menu ${isMenuVisible ? 'visible' : ''}`}>
       <aside className="menu-sidebar" aria-label="Menu tabs">
         <button
           type="button"
-          className={activeTab === "history" ? "active" : ""}
-          onClick={() => setActiveTab("history")}
+          className={activeTab === 'history' ? 'active' : ''}
+          onClick={() => setActiveTab('history')}
         >
           <FaHistory size={16} />
           History
@@ -163,17 +154,16 @@ export default function Menu () {
 
         <button
           type="button"
-          className={activeTab === "settings" ? "active" : ""}
-          onClick={() => setActiveTab("settings")}
+          className={activeTab === 'settings' ? 'active' : ''}
+          onClick={() => setActiveTab('settings')}
         >
           <FaCog size={16} />
           Settings
         </button>
-
       </aside>
 
       <div className="menu-content">
-        {activeTab === "history" ? (
+        {activeTab === 'history' ? (
           <section className="history-panel" aria-label="History">
             <div className="cards-container">
               {historyCards.map(({ data, index }) => {
@@ -201,7 +191,7 @@ export default function Menu () {
             <nav className="history-actions" aria-label="History actions">
               <button
                 type="button"
-                className={showFavoritesOnly ? "active" : ""}
+                className={showFavoritesOnly ? 'active' : ''}
                 onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
               >
                 <FaStar size={14} />
@@ -231,8 +221,8 @@ export default function Menu () {
                   <button
                     key={color}
                     type="button"
-                    className={primaryColor === color ? "active" : ""}
-                    style={{ "--preset-color": color } as CSSProperties}
+                    className={primaryColor === color ? 'active' : ''}
+                    style={{ '--preset-color': color } as CSSProperties}
                     aria-label={`Set primary color to ${color}`}
                     onClick={() => {
                       ConfigStore.theme.primary = color
@@ -240,11 +230,8 @@ export default function Menu () {
                   />
                 ))}
                 <label
-                  className={
-                    "custom-color-button" +
-                    (isCustomPrimaryColor ? " active" : "")
-                  }
-                  style={{ "--preset-color": primaryColor } as CSSProperties}
+                  className={'custom-color-button' + (isCustomPrimaryColor ? ' active' : '')}
+                  style={{ '--preset-color': primaryColor } as CSSProperties}
                   aria-label="Choose custom primary color"
                 >
                   <FaEyeDropper size={15} aria-hidden="true" />
@@ -262,9 +249,7 @@ export default function Menu () {
             <section className="settings-section">
               <div className="settings-header">
                 <h2>Background Dim</h2>
-                <p>
-                  Choose the background dim opacity percentage.
-                </p>
+                <p>Choose the background dim opacity percentage.</p>
               </div>
 
               <label className="range-picker-row">
@@ -280,9 +265,7 @@ export default function Menu () {
                 step="0.01"
                 value={backgroundDim}
                 onChange={(event) => {
-                  ConfigStore.theme.backgroundDim = Number(
-                    event.currentTarget.value
-                  )
+                  ConfigStore.theme.backgroundDim = Number(event.currentTarget.value)
                 }}
               />
             </section>
@@ -298,12 +281,12 @@ export default function Menu () {
                   <span>Reroll jingle</span>
                   <button
                     type="button"
-                    className={settings.soundEffects ? "active" : ""}
+                    className={settings.soundEffects ? 'active' : ''}
                     onClick={() => {
                       ConfigStore.settings.soundEffects = !ConfigStore.settings.soundEffects
                     }}
                   >
-                    {settings.soundEffects ? "on" : "off"}
+                    {settings.soundEffects ? 'on' : 'off'}
                   </button>
                 </label>
 
@@ -311,12 +294,12 @@ export default function Menu () {
                   <span>Large flash</span>
                   <button
                     type="button"
-                    className={settings.rerollFlash ? "active" : ""}
+                    className={settings.rerollFlash ? 'active' : ''}
                     onClick={() => {
                       ConfigStore.settings.rerollFlash = !ConfigStore.settings.rerollFlash
                     }}
                   >
-                    {settings.rerollFlash ? "on" : "off"}
+                    {settings.rerollFlash ? 'on' : 'off'}
                   </button>
                 </label>
               </span>

@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     tags:
-      - "*"
+      - '*'
 
 jobs:
   build:
@@ -12,20 +12,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: bun install --frozen-lockfile
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Restore extension key
+        if: ${{ secrets.EXTENSION_KEY != '' }}
+        shell: bash
+        run: echo "${{ secrets.EXTENSION_KEY }}" | base64 -d > extension-key.pem
 
       - name: Build extension
-        run: npm run build
-
-      - name: Zip release artifact
-        run: cd dist && zip -r ../atarashii-new-tab.zip .
+        run: bun run build:crx
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: atarashii-new-tab.zip
+          artifacts: atarashii-new-tab.crx,atarashii-new-tab.zip
           immutableCreate: true

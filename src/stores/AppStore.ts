@@ -1,4 +1,4 @@
-import { proxy } from "valtio"
+import { proxy } from 'valtio'
 
 export const LoadState = {
   FETCH_NEW: 0,

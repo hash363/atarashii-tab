@@ -1,9 +1,9 @@
-import { useSnapshot } from "valtio"
-import { ConfigStore, toggleMenu } from "../stores/ConfigStore"
-import { useEffect, useState } from "react"
-import { FaArrowDown, FaArrowUp } from "react-icons/fa"
+import { useSnapshot } from 'valtio'
+import { ConfigStore, toggleMenu } from '../stores/ConfigStore'
+import { useEffect, useState } from 'react'
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa'
 
-import "./styles/MenuButton.scss"
+import './styles/MenuButton.scss'
 
 const TIMEOUT_MS = 3000
 
@@ -19,11 +19,7 @@ function MenuButton() {
   }, [])
 
   return (
-    <div
-      className={`menu-button ${
-        isVisible || isHovered ? "visible" : ""
-      }`}
-    >
+    <div className={`menu-button ${isVisible || isHovered ? 'visible' : ''}`}>
       <button
         onClick={toggleMenu}
         onMouseEnter={() => {

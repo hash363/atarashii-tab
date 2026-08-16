@@ -1,24 +1,27 @@
 {
   "name": "atarashii-tab",
-  "private": true,
   "version": "0.1.10",
-  "type": "module",
+  "private": true,
   "description": "Displays anime wallpapers from r/Animewallpaper on your new tab page",
   "homepage": "https://github.com/cf12/atarashii-tab#readme",
   "bugs": {
     "url": "https://github.com/cf12/atarashii-tab/issues"
   },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cf12/atarashii-tab.git"
   },
-  "license": "MIT",
+  "type": "module",
   "scripts": {
     "dev:watch": "vite build --mode development --watch",
     "dev": "vite",
     "build": "vite build",
     "build:strict": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build:crx": "bun run build && crx3 -p extension-key.pem -o atarashii-new-tab.crx -z atarashii-new-tab.zip dist",
+    "lint": "oxlint",
+    "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -30,7 +33,6 @@
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
@@ -39,30 +41,27 @@
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
     "@uidotdev/usehooks": "^2.4.1",
-    "@vitejs/plugin-react": "^5.0.0",
-    "@vitest/coverage-v8": "^3.2.4",
-    "@vitest/ui": "^3.2.4",
+    "@vitejs/plugin-react": "^6.0.5",
+    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/ui": "^4.1.10",
     "autoprefixer": "^10.4.21",
-    "eslint": "^9.33.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.20",
-    "globals": "^16.3.0",
+    "crx3": "^2.0.0",
     "html-entities": "^2.6.0",
     "jsdom": "^26.1.0",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
     "playwright": "^1.37.1",
     "postcss": "^8.5.6",
     "react-icons": "^4.12.0",
     "react-spinners": "^0.17.0",
     "sass-embedded": "^1.91.0",
     "typescript": "~5.8.3",
-    "typescript-eslint": "^8.39.1",
     "valtio": "^2.1.7",
     "valtio-persist": "^2.2.4",
-    "vite": "^7.1.2",
+    "vite": "^8.2.1",
     "vite-plugin-static-copy": "^3.1.2",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.10"
   }
 }
-

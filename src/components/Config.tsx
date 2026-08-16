@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   FaExclamationTriangle,
   FaEye,
@@ -6,10 +6,10 @@ import {
   FaSync,
   FaThumbtack,
   FaUserSecret,
-} from "react-icons/fa"
+} from 'react-icons/fa'
 
-import { useSnapshot } from "valtio"
-import { clearCache } from "../stores/CacheStore"
+import { useSnapshot } from 'valtio'
+import { clearCache } from '../stores/CacheStore'
 import {
   CONFIG_STATE_PICKABLE_FIELDS_MAP,
   ConfigStore,
@@ -17,10 +17,10 @@ import {
   toggle,
   toggleNsfw,
   type ConfigStatePickableFields,
-} from "../stores/ConfigStore"
-import "./styles/Config.scss"
+} from '../stores/ConfigStore'
+import './styles/Config.scss'
 
-import { LoadState, setLoaded, setShowRollOverlay } from "../stores/AppStore"
+import { LoadState, setLoaded, setShowRollOverlay } from '../stores/AppStore'
 
 function playRollSound() {
   const AudioContextClass = window.AudioContext
@@ -33,7 +33,7 @@ function playRollSound() {
     const gain = audio.createGain()
     const oscillator = audio.createOscillator()
 
-    oscillator.type = "triangle"
+    oscillator.type = 'triangle'
     oscillator.frequency.setValueAtTime(frequency, start)
     gain.gain.setValueAtTime(0.0001, start)
     gain.gain.exponentialRampToValueAtTime(0.055, start + 0.01)
@@ -46,11 +46,7 @@ function playRollSound() {
   })
 }
 
-const ValuePicker = ({
-  valueKey,
-}: {
-  valueKey: keyof ConfigStatePickableFields
-}) => {
+const ValuePicker = ({ valueKey }: { valueKey: keyof ConfigStatePickableFields }) => {
   const config = useSnapshot(ConfigStore)
   const values = CONFIG_STATE_PICKABLE_FIELDS_MAP[valueKey]
   const curValue = config[valueKey]
@@ -74,9 +70,13 @@ const ValuePicker = ({
             >
               {value}
             </a>
-          )
+          ),
         )
-        .reduce((prev, cur) => <>{prev} • {cur}</>)}
+        .reduce((prev, cur) => (
+          <>
+            {prev} • {cur}
+          </>
+        ))}
     </div>
   )
 }
@@ -96,10 +96,7 @@ function Config() {
     if (config.settings.rerollFlash) {
       requestAnimationFrame(() => setShowRollOverlay(true))
 
-      rollOverlayTimeout.current = window.setTimeout(
-        () => setShowRollOverlay(false),
-        900
-      )
+      rollOverlayTimeout.current = window.setTimeout(() => setShowRollOverlay(false), 900)
     }
 
     setLoaded(LoadState.FETCH_NEW)
@@ -115,7 +112,7 @@ function Config() {
   const buttons = useMemo(
     () => [
       {
-        id: "nsfw",
+        id: 'nsfw',
         icon: FaExclamationTriangle,
         action: () => {
           if (config.pinned) ConfigStore.pinned = false
@@ -128,44 +125,37 @@ function Config() {
         // keyBinding: "KeyN",
       },
       {
-        id: "pin",
+        id: 'pin',
         icon: FaThumbtack,
-        action: () => toggle("pinned"),
+        action: () => toggle('pinned'),
         isActive: config.pinned,
         isDisabled: config.incognito,
-        keyBinding: "KeyP",
+        keyBinding: 'KeyP',
       },
       {
-        id: "reroll",
+        id: 'reroll',
         icon: FaSync,
         action: reroll,
         isActive: isRolling,
         isDisabled: config.incognito || config.pinned,
-        keyBinding: "KeyR",
+        keyBinding: 'KeyR',
       },
       {
-        id: "incognito",
+        id: 'incognito',
         icon: FaUserSecret,
-        action: () => toggle("incognito"),
+        action: () => toggle('incognito'),
         isActive: config.incognito,
-        keyBinding: "KeyI",
+        keyBinding: 'KeyI',
       },
       {
-        id: "hideGui",
-        label: () => `${!config.hideGui ? "hide" : "show"} gui`,
+        id: 'hideGui',
+        label: () => `${!config.hideGui ? 'hide' : 'show'} gui`,
         icon: config.hideGui ? FaEye : FaEyeSlash,
-        action: () => toggle("hideGui"),
-        keyBinding: "KeyH",
+        action: () => toggle('hideGui'),
+        keyBinding: 'KeyH',
       },
     ],
-    [
-      config.hideGui,
-      config.incognito,
-      config.nsfw,
-      config.pinned,
-      isRolling,
-      reroll,
-    ]
+    [config.hideGui, config.incognito, config.nsfw, config.pinned, isRolling, reroll],
   )
 
   // Simplified keyboard event handler
@@ -179,22 +169,20 @@ function Config() {
       if (button && !button.isDisabled) button.action()
     }
 
-    document.addEventListener("keydown", action)
-    return () => document.removeEventListener("keydown", action)
+    document.addEventListener('keydown', action)
+    return () => document.removeEventListener('keydown', action)
   }, [config, buttons])
 
   return (
     <div className="config">
       <ValuePicker valueKey="sort" />
-      {config.sort !== "new" && <ValuePicker valueKey="t" />}
+      {config.sort !== 'new' && <ValuePicker valueKey="t" />}
 
       <span className="buttons">
         {buttons.map((button) => (
           <button
             key={button.id}
-            className={
-              `button-${button.id}` + (button.isActive ? " active" : "")
-            }
+            className={`button-${button.id}` + (button.isActive ? ' active' : '')}
             onClick={button.action}
             disabled={button.isDisabled}
           >

@@ -1,9 +1,9 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
-import { viteStaticCopy } from "vite-plugin-static-copy"
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
-import packageJson from "./package.json"
+import packageJson from './package.json' with { type: 'json' }
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,8 +12,8 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: "public/manifest.json",
-          dest: "",
+          src: 'public/manifest.json',
+          dest: '',
           transform: (content) => {
             return JSON.stringify({
               description: packageJson.description,
@@ -27,11 +27,12 @@ export default defineConfig({
   ],
   test: {
     globals: true,
-    environment: "jsdom",
-    setupFiles: "./tests/setup.ts",
+    environment: 'jsdom',
+    setupFiles: './tests/setup.ts',
+    clearMocks: true,
     coverage: {
       include: ['src/**/*.{ts,tsx}'],
-      exclude: []
+      exclude: [],
     },
   },
 })

@@ -1,30 +1,22 @@
-import { useEffect } from "react"
-import { FaHeart, FaReddit, FaSadTear, FaSync } from "react-icons/fa"
-import { PuffLoader } from "react-spinners"
+import { useEffect } from 'react'
+import { FaHeart, FaReddit, FaSadTear, FaSync } from 'react-icons/fa'
+import { PuffLoader } from 'react-spinners'
 
-import Config from "./components/Config"
-import Menu from "./components/Menu"
-import Image from "./components/Image"
-import { TimeDate } from "./components/TimeDate"
+import Config from './components/Config'
+import Menu from './components/Menu'
+import Image from './components/Image'
+import { TimeDate } from './components/TimeDate'
 
-import pkg from "../package.json"
+import pkg from '../package.json'
 
-import { useSnapshot } from "valtio"
-import "./App.scss"
-import {
-  AppStore,
-  LoadState,
-  setLoaded,
-} from "./stores/AppStore"
-import { CacheStore } from "./stores/CacheStore"
-import { ConfigStore } from "./stores/ConfigStore"
-import {
-  HistoryStore,
-  pushPostToHistory,
-  type RedditPost,
-} from "./stores/HistoryStore"
-import { fetchPosts } from "./utils/fetchPosts"
-import MenuButton from "./components/MenuButton"
+import { useSnapshot } from 'valtio'
+import './App.scss'
+import { AppStore, LoadState, setLoaded } from './stores/AppStore'
+import { CacheStore } from './stores/CacheStore'
+import { ConfigStore } from './stores/ConfigStore'
+import { HistoryStore, pushPostToHistory, type RedditPost } from './stores/HistoryStore'
+import { fetchPosts } from './utils/fetchPosts'
+import MenuButton from './components/MenuButton'
 
 function App() {
   const { loaded, showRollOverlay } = useSnapshot(AppStore)
@@ -35,14 +27,11 @@ function App() {
   // const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
-    document.documentElement.style.setProperty(
-      "--primary",
-      config.theme.primary
-    )
+    document.documentElement.style.setProperty('--primary', config.theme.primary)
 
     document.documentElement.style.setProperty(
-      "--background-dim",
-      String(config.theme.backgroundDim)
+      '--background-dim',
+      String(config.theme.backgroundDim),
     )
   }, [config.theme.primary, config.theme.backgroundDim])
 
@@ -54,8 +43,7 @@ function App() {
 
   useEffect(() => {
     // No-op if incognito or pinned
-    if (config.incognito || config.pinned || loaded !== LoadState.FETCH_NEW)
-      return
+    if (config.incognito || config.pinned || loaded !== LoadState.FETCH_NEW) return
 
     let ignore = false
 
@@ -63,11 +51,8 @@ function App() {
       let posts: RedditPost[] = []
 
       // Cache for 24 hours
-      if (
-        cache.lastUpdated === -1 ||
-        Date.now() - cache.lastUpdated >= 1000 * 60 * 60 * 24
-      ) {
-        console.log("[i] Fetching w/ config:", config)
+      if (cache.lastUpdated === -1 || Date.now() - cache.lastUpdated >= 1000 * 60 * 60 * 24) {
+        console.log('[i] Fetching w/ config:', config)
         try {
           posts = await fetchPosts(config)
           if (!ignore) {
@@ -75,10 +60,10 @@ function App() {
             CacheStore.data = posts
           }
         } catch (error) {
-          console.error("[i] Failed to fetch posts:", error)
+          console.error('[i] Failed to fetch posts:', error)
         }
       } else {
-        console.log("[i] Using cached posts")
+        console.log('[i] Using cached posts')
         posts = cache.data as RedditPost[]
       }
 
@@ -90,7 +75,7 @@ function App() {
       const num = Math.floor(Math.random() * posts.length)
       const post = posts[num]
 
-      console.log("[i] Loading post:", post)
+      console.log('[i] Loading post:', post)
 
       pushPostToHistory(post, num, posts.length)
       setLoaded(LoadState.LOADING)
@@ -111,7 +96,7 @@ function App() {
       : undefined
 
   return (
-    <div className={showRollOverlay ? "roll-flashing" : ""}>
+    <div className={showRollOverlay ? 'roll-flashing' : ''}>
       {showRollOverlay && (
         <div className="roll-overlay" aria-label="Rolling wallpaper">
           <FaSync size={48} />
@@ -120,10 +105,10 @@ function App() {
 
       <div
         className={
-          "app-frame " +
-          (!config.incognito && loaded === LoadState.LOADED ? "load" : "") +
-          " " +
-          (config.hideGui ? "hidden" : "")
+          'app-frame ' +
+          (!config.incognito && loaded === LoadState.LOADED ? 'load' : '') +
+          ' ' +
+          (config.hideGui ? 'hidden' : '')
         }
       >
         <div className="content">
@@ -151,7 +136,7 @@ function App() {
                   </strong>
                 ) : (
                   <>
-                    Image from{" "}
+                    Image from{' '}
                     <a href="https://reddit.com/r/animewallpaper">
                       <FaReddit size={20} /> r/Animewallpaper
                     </a>
@@ -164,9 +149,8 @@ function App() {
                   <>Try different filters! • Reddit down perhaps?</>
                 ) : (
                   <>
-                    Post <strong>#{(data?.nums[0] || 0) + 1}</strong> of{" "}
-                    <strong>{data?.nums[1]}</strong> •{" "}
-                    <a href={data?.link}>{data?.link}</a>
+                    Post <strong>#{(data?.nums[0] || 0) + 1}</strong> of{' '}
+                    <strong>{data?.nums[1]}</strong> • <a href={data?.link}>{data?.link}</a>
                   </>
                 )}
               </p>
@@ -180,7 +164,7 @@ function App() {
 
             <div className="credits">
               <p>
-                Created with <FaHeart /> •{" "}
+                Created with <FaHeart /> •{' '}
                 <a href="https://github.com/cf12/atarashii-tab">v{pkg.version}</a>
               </p>
             </div>
